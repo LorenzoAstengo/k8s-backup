@@ -2,13 +2,14 @@
 Kubackup is a useful script to make a backup of all the resources of a namespace on kubernetes.
 
 The script exports:
-..* deployments
-..* services
-..* configMaps
-..* persistentVolumes
-..* persistentVolumeClaim
+* deployments
+* services
+* configMaps
+* persistentVolumes
+* persistentVolumeClaim
 
 The script creates in the current path a folder called as the namespace, all backup files are generated in it. All resources are saved in yaml files, those contained in the configMaps are instead saved separately from each other in special folders.
+It also **does not save** the clustered resource information to all generated files.
 
 ## How to
 To allow the correct functioning of the script, it must be run with a user enabled to read all the resources of the indicated namespace.
