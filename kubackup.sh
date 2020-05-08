@@ -99,7 +99,7 @@ done
 cd ..
 
 echo Cleaning all meta information...
-declare -a personalParams=("annotations" "revision" "last-applied-configuration" "creationTimestamp" "generation" "resourceVersion" "selfLink" "uid" "progressDeadlineSeconds" "{\"apiVersion" "clusterIP:")
+declare -a personalParams=("annotations" "revision" "last-applied-configuration" "creationTimestamp" "generation" "resourceVersion" "selfLink" "uid" "progressDeadlineSeconds" "{\"apiVersion" "clusterIP:" "bound-by-controller")
 for par in "${personalParams[@]}"
 do
         find ./ -type f -exec sed -i "s/^.*$par.*$//g" {} \;
