@@ -13,7 +13,7 @@ The script exports:
 * serviceAccounts
 
 The script creates in the current path a folder called as the namespace, all backup files are generated in it. All resources are saved in yaml files, those contained in the configMaps are instead saved separately from each other in special folders.
-It also has a clean mode that **does not save** the cluster resource information in all generated files.
+It also has a clean mode that **does not save** the cluster resource information in all generated files and a cmyaml mode that saves configmaps as yaml files.
 
 
 
@@ -22,7 +22,7 @@ To allow the correct functioning of the script, it must be run with a user enabl
 For correct execution, indicate the namespace in one of the following four ways:
 ```
 ./k8s-backup.sh -n=<NAMESPACE>
-./k8s-backup.sh -n=<NAMESPACE> -clean (to remove metadata informations)
+./k8s-backup.sh -n=<NAMESPACE> -clean or --clean (remove metadata informations) --cmyaml (backup cm as yaml file)"
 ./k8s-backup.sh -h (script help)
 ```
 If you use arguments separated by '=', don't use spaces in them.

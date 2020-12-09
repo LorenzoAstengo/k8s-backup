@@ -26,13 +26,13 @@ for i in "$@"; do
                 ;;
         -h*)
                 echo "Arguments: -n=<namespace>"
-                echo "Optionals: -clean or --clean(remove metadata informations)"
+                echo "Optionals: -clean or --clean (remove metadata informations) --cmyaml (backup cm as yaml file)"
                 exit 1
                 ;;
         *)
                 echo "Wrong argument! Please use:"
                 echo "Arguments: -n=<namespace>"
-                echo "Optionals: -clean or --clean(remove metadata informations)"
+                echo "Optionals: -clean or --clean (remove metadata informations) --cmyaml (backup cm as yaml file)"
                 exit 1
                 ;;
         esac
