@@ -92,18 +92,16 @@ cd configMaps
 echo "Storing configmaps.."
 if ($cmyaml); then
         echo "ConfigMaps in yaml mode"
-fi
-
-for cm in $(kubectl -n $namespace get cm | awk 'NR>1{print $1}'); do
-        if ($cmyaml); then
-                kubectl -n $namespace get cm $cm >${cm}.yaml
-        else
+        for cm in $(kubectl -n $namespace get cm | awk 'NR>1{print $1}'); do
+                kubectl -n $namespace get cm $cm -oyaml >${cm}.yaml
+                echo "=> ConfigMap $cm stored."
+        done
+else
+        for cm in $(kubectl -n $namespace get cm | awk 'NR>1{print $1}'); do
                 mkdir $cm
                 kubectl -n $namespace describe cm $cm >"$cm/$cm"
                 echo "=> created folder of configmap $cm."
-        fi
-done
-if (! $cmyaml); then
+        done
         for dir in $(ls); do
                 file="$dir/$dir"
                 subfileName=$dir/tmpFile
