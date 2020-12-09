@@ -4,6 +4,7 @@ source /home/kadmin/.bash_profile
 shopt -s expand_aliases
 
 clean=false
+cmyaml=false
 
 for i in "$@"; do
         case $i in
@@ -11,13 +12,27 @@ for i in "$@"; do
                 namespace="${i#*=}"
                 shift
                 ;;
-        -clean*)
+        -clean)
                 clean=true
+                shift
+                ;;
+        --clean)
+                clean=true
+                shift
+                ;;
+        --cmyaml)
+                cmyaml=true
                 shift
                 ;;
         -h*)
                 echo "Arguments: -n=<namespace>"
-                echo "Optionals: -clean (remove metadata informations)"
+                echo "Optionals: -clean or --clean(remove metadata informations)"
+                exit 1
+                ;;
+        *)
+                echo "Wrong argument! Please use:"
+                echo "Arguments: -n=<namespace>"
+                echo "Optionals: -clean or --clean(remove metadata informations)"
                 exit 1
                 ;;
         esac
@@ -75,32 +90,41 @@ cd ..
 mkdir configMaps
 cd configMaps
 echo "Storing configmaps.."
+if ($cmyaml); then
+        echo "ConfigMaps in yaml mode"
+fi
+
 for cm in $(kubectl -n $namespace get cm | awk 'NR>1{print $1}'); do
-        mkdir $cm
-        kubectl -n $namespace describe cm $cm >"$cm/$cm"
-        echo "=> created folder of configmap $cm."
+        if ($cmyaml); then
+                kubectl -n $namespace get cm $cm >${cm}.yaml
+        else
+                mkdir $cm
+                kubectl -n $namespace describe cm $cm >"$cm/$cm"
+                echo "=> created folder of configmap $cm."
+        fi
 done
+if (! $cmyaml); then
+        for dir in $(ls); do
+                file="$dir/$dir"
+                subfileName=$dir/tmpFile
 
-for dir in $(ls); do
-        file="$dir/$dir"
-        subfileName=$dir/tmpFile
+                while IFS= read -r line; do
+                        if [ "$line" == "----" ]; then
+                                sed -i '$ d' $subfileName
+                                subfileName=$dir/$(echo $previousLine | tr -d ':')
+                                echo "==>storing file $subfileName..."
+                        elif [ "$(echo $line | awk '{print $1}')" == "Events:" ]; then
+                                break
+                        else
+                                echo "$line" >>"$subfileName"
+                        fi
 
-        while IFS= read -r line; do
-                if [ "$line" == "----" ]; then
-                        sed -i '$ d' $subfileName
-                        subfileName=$dir/$(echo $previousLine | tr -d ':')
-                        echo "==>storing file $subfileName..."
-                elif [ "$(echo $line | awk '{print $1}')" == "Events:" ]; then
-                        break
-                else
-                        echo "$line" >>"$subfileName"
-                fi
+                        previousLine=$line
+                done <"$file"
 
-                previousLine=$line
-        done <"$file"
-
-        rm $dir/$dir $dir/tmpFile
-done
+                rm $dir/$dir $dir/tmpFile
+        done
+fi
 cd ..
 
 mkdir ingress
