@@ -44,9 +44,15 @@ fi
 
 echo Starting export...
 if $clean; then
+        if [[ -d ${namespace}-clean ]]; then
+                mv ${namespace}-clean ${namespace}-clean-OLD
+        fi
         mkdir ${namespace}-clean
         cd ${namespace}-clean
 else
+        if [[ -d ${namespace} ]]; then
+                mv ${namespace} ${namespace}-OLD
+        fi
         mkdir $namespace
         cd $namespace
 fi
