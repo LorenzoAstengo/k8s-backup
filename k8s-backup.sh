@@ -1,6 +1,6 @@
 #!/bin/bash
 #Caricamento alias
-source /home/kadmin/.bash_profile
+source /home/$USER/.bash_profile
 shopt -s expand_aliases
 
 clean=false
