@@ -169,9 +169,8 @@ cd ..
 
 if $clean; then
         echo Cleaning all meta information...
-        declare -a personalParams=("annotations" "revision" "last-applied-configuration" "creationTimestamp" "generation:" "resourceVersion" "selfLink" "uid" "progressDeadlineSeconds" "{\"apiVersion" "clusterIP:" "pv.kubernetes.io\/bound-by-controller: \"yes\"" "bind-completed" "kubectl.kubernetes.io\/restartedAt" "meta.helm.sh")
+        declare -a personalParams=("annotations:" "revision:" "last-applied-configuration:" "creationTimestamp:" "generation:" "resourceVersion:" "selfLink:" "uid:" "progressDeadlineSeconds:" "{\"apiVersion" "clusterIP:" "pv.kubernetes.io\/bound-by-controller: \"yes\"" "bind-completed:" "kubectl.kubernetes.io\/restartedAt:" "meta.helm.sh")
         for par in "${personalParams[@]}"; do
-                #find ./ -type f -exec sed -i "s/^.*$par.*$//g" {} \;
                 for file in $(find . -type f); do
                         sed -i "s/^.*$par.*$//g" $file
                 done
