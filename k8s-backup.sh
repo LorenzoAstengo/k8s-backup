@@ -109,8 +109,9 @@ else
                 echo "=> created folder of configmap $cm."
         done
         for dir in $(ls); do
+                dir=${dir%/}
                 file="$dir/$dir"
-                subfileName=$dir/tmpFile
+                subfileName="$dir/tmpFile"
 
                 while IFS= read -r line; do
                         if [ "$line" == "----" ]; then
@@ -126,7 +127,7 @@ else
                         previousLine=$line
                 done <"$file"
 
-                rm $dir/$dir $dir/tmpFile
+                rm "$dir/$dir" "$dir/tmpFile"
         done
 fi
 cd ..
